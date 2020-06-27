@@ -1,0 +1,29 @@
+.active{
+  background: #ffff;
+  color:#673ab7;
+  font-weight: bold;
+}
+.user-profile {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+  width: 100px;
+  height: 100px;
+}
+.user-profile img {
+  border-radius: 50%;
+  max-width: 100%;
+}
+body.noScroll { /* ...or body.dialogShowing */
+  overflow: hidden;
+}
+.center{
+  margin: 0 auto;
+}
+.return-visits-container{
+  display: none;
+}
+.no-padding{padding: 0 !important}
+.marging-top-46{margin-top: 46px !important}
+.marging-bottom-46{margin-bottom: 46px !important}
+.width-70per{width: 70%;}

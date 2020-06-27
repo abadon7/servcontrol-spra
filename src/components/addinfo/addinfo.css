@@ -1,0 +1,36 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+}
+.grid-item{
+    background: tomato;
+    padding: 5px;
+    text-align: center;
+}
+.info-container{
+    width: 90%;
+    margin: auto;
+    text-align: center;
+}
+/* .info-container input{
+    margin-bottom: 0px;
+    border: 1px solid #ddd;
+    width: 100px;
+    display: inline;
+    padding: 5px;
+    margin-bottom: 5px;
+} */
+.add-form{
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 10px;
+}
+.data-table{
+    width: 100%;
+    text-align: center;
+}
+.add-container{
+    width: 90%;
+    max-width: 400px;
+    margin: 16px auto auto auto;
+}
