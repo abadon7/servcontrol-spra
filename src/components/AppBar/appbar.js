@@ -10,14 +10,15 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import UserContext, { dateContext } from "../app/contextData";
-import DialogMenu from "../AppBar/DialogMenu";
-
+import Logo from "../logo/Logo";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    padding: "0",
+    paddingLeft: "12px"
   },
   title: {
     flexGrow: 1,
@@ -44,8 +45,12 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="transparent" elevation={0}>
+      <AppBar position="static" color="inherit" elevation={0}>
         <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <Logo />
+          </IconButton>
+
           <Typography variant="h6" className={classes.title}>
             Service
           </Typography>
@@ -58,6 +63,7 @@ export default function MenuAppBar() {
                   aria-haspopup="true"
                   onClick={handleMenu}
                   color="inherit"
+                  size="small"
                 >
                   <Avatar alt={userid} src={userimage} />
                 </IconButton>
@@ -76,7 +82,7 @@ export default function MenuAppBar() {
                   open={open}
                   onClose={handleClose}
                 >
-                    <span>{userid}</span>
+                  <span>{userid}</span>
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                   <MenuItem onClick={handleClose}>My account</MenuItem>
                   <MenuItem
@@ -90,7 +96,6 @@ export default function MenuAppBar() {
               </div>
             )}
           </UserContext.Consumer>
-          <DialogMenu></DialogMenu>
         </Toolbar>
       </AppBar>
     </div>

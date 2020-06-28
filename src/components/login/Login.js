@@ -7,6 +7,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+import Logo from "../logo/Logo"
 
 const useStyles = makeStyles({
   buttomGradient: {
@@ -27,16 +28,6 @@ const useStyles = makeStyles({
   },
   paperCotainer: {
     padding: "50px 0",
-  },
-  squareLogo: {
-    width: '50px',
-    height: '50px',
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    background: '#E91E63',
-    color: 'white',
-    fontSize: '30px'
   },
 });
 function Login(props) {
@@ -62,9 +53,7 @@ function Login(props) {
                   align="center"
                 >
                   <Grid item xs={10}>
-                    <div className={classes.squareLogo}>
-                      SC
-                    </div>
+                    <Logo></Logo>
                     <Typography component="h1" variant="h5">
                       Welcome to ServControl
                     </Typography>
