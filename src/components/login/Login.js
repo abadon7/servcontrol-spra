@@ -53,7 +53,7 @@ function Login(props) {
                   align="center"
                 >
                   <Grid item xs={10}>
-                    <Logo></Logo>
+                    <Logo style={{ fontSize: 50 }}/>
                     <Typography component="h1" variant="h5">
                       Welcome to ServControl
                     </Typography>

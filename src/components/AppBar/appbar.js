@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     padding: "0",
-    paddingLeft: "12px"
+    marginLeft: "12px"
   },
   title: {
     flexGrow: 1,
@@ -48,7 +48,7 @@ export default function MenuAppBar() {
       <AppBar position="static" color="inherit" elevation={0}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <Logo />
+            <Logo style={{ fontSize: 40 }} />
           </IconButton>
 
           <Typography variant="h6" className={classes.title}>

@@ -81,7 +81,7 @@ const App = (props) => {
         console.log("go to Login");
       }
     });
-  });
+  },[]);
   return (
     <UserContext.Provider
       value={{ userid, datequery, changeUser, login, logout, userimage  }}
