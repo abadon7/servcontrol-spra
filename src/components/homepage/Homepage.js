@@ -1,6 +1,6 @@
 import React from "react";
 import UserContext, { dateContext } from "../app/contextData";
-import Button from "@material-ui/core/Button";
+/* import Button from "@material-ui/core/Button"; */
 import MenuAppBar from "../AppBar/appbar";
 import ListAll from "../details/ListAll";
 function Homepage(props) {
@@ -11,7 +11,7 @@ function Homepage(props) {
     <UserContext.Consumer>
       {({ userid, datequery, logout }) => (
         <div className="w3-section">
-          <MenuAppBar></MenuAppBar>
+          <MenuAppBar></MenuAppBar>|
           <p>
             Welcome {userid} in {datequery}
           </p>
