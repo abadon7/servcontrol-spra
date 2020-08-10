@@ -24,7 +24,11 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         flexGrow: 1
+    },
+    marginBottom10:{
+        marginBottom:10
     }
+
 }));
 
 export default function MenuAppBar() {
@@ -44,7 +48,7 @@ export default function MenuAppBar() {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="inherit" elevation={0}>
+            <AppBar position="fixed" color="inherit" elevation={0}>
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -102,6 +106,7 @@ export default function MenuAppBar() {
                             </div>
                 </Toolbar>
             </AppBar>
+            <Toolbar className={classes.marginBottom10}/>
         </div>
     );
 }

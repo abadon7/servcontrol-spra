@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { auth, provider } from "../firebase/firebaseInit";
+//import CircularProgress from "@material-ui/core/CircularProgress";
+import { makeStyles } from "@material-ui/core/styles";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        width: "100%",
+        "& > * + *": {
+            marginTop: theme.spacing(2)
+        }
+    }
+}));
 
 export const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [pending, setPending] = useState(true);
+    const classes = useStyles();
 
     const changeUser = userdata => {
         setCurrentUser(userdata);
@@ -32,7 +45,11 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     if (pending) {
-        return <>Loading...</>;
+        return (
+            <div className={classes.root}>
+                <LinearProgress />
+            </div>
+        );
     }
 
     return (
