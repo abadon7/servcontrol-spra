@@ -43,7 +43,7 @@ function Homepage(props) {
 
     const [dataUser, setDataUser] = useState(cDataUserName);
     const [dateState, setDateState] = React.useState({
-        month: new Date().getMonth(),
+        month: new Date().getMonth()+1,
         year: new Date().getFullYear()
     });
     const pushData = data => {

@@ -112,7 +112,7 @@ export default function AddDialog(props) {
         est: 0,
         //horas: new Date(new Date().setHours(0,0,0,0)),
         horas: "00:00",
-        month: dateNow.getMonth(),
+        month: dateNow.getMonth() + 1,
         pubs: 0,
         rr: 0,
         rvnames: [],
@@ -137,7 +137,7 @@ export default function AddDialog(props) {
                 day: cloneDate.getDate(),
                 weekday: cloneDate.getDay(),
                 year: cloneDate.getFullYear(),
-                month: cloneDate.getMonth()
+                month: cloneDate.getMonth() + 1
             });
             return true;
         }
@@ -263,6 +263,7 @@ export default function AddDialog(props) {
                                 label="Placements"
                                 type="number"
                                 color="secondary"
+                                placeholder="0"
                                 defaultValue={dataRValues.pubs}
                                 onChange={handlenChange}
                                 InputLabelProps={{
@@ -270,6 +271,9 @@ export default function AddDialog(props) {
                                 }}
                                 InputProps={{
                                     name: "pubs"
+                                }}
+                                inputProps={{
+                                    min: "0"
                                 }}
                                 variant="outlined"
                             />
@@ -286,12 +290,16 @@ export default function AddDialog(props) {
                                 InputProps={{
                                     name: "vid"
                                 }}
+                                inputProps={{
+                                    min: "0"
+                                }}
                                 type="number"
                             />
                         </div>
                         <div>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <TimePicker
+                                    required
                                     clearable
                                     ampm={false}
                                     label="Hours"
