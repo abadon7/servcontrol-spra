@@ -72,12 +72,12 @@ export default function AddDialog(props) {
     };
     //const inputDate = dataRValues.date;
     const classes = useStyles();
-    const [checked, setChecked] = React.useState([]);
+    //const [checked, /*setChecked*/] = React.useState([]);
 
     const handleToggle = value => () => {
         console.log("checking or unchecking " + value);
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
+        //const currentIndex = checked.indexOf(value);
+        //const newChecked = [...checked];
 
         //if (currentIndex === -1) {
         //    newChecked.push(value);

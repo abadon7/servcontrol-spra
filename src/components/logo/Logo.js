@@ -1,24 +1,24 @@
 import React from 'react';
-import { makeStyles } from "@material-ui/core/styles";
+//import { makeStyles } from "@material-ui/core/styles";
 import SvgIcon from "@material-ui/core/SvgIcon"
 
-const useStyles = makeStyles({
-
-    squareLogo: {
-        width: '40px',
-        height: '40px',
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'center',
-        background: '#E91E63',
-        color: 'white',
-        fontSize: '20px'
-    },
-
-})
+//const useStyles = makeStyles({
+//
+//    squareLogo: {
+//        width: '40px',
+//        height: '40px',
+//        alignItems: 'center',
+//        display: 'flex',
+//        justifyContent: 'center',
+//        background: '#E91E63',
+//        color: 'white',
+//        fontSize: '20px'
+//    },
+//
+//})
 
 const Logo = (props) => {
-    const classes = useStyles();
+    //const classes = useStyles();
     return (
         /*  <div className={classes.squareLogo}>
              SC

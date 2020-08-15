@@ -36,12 +36,12 @@ function Homepage(props) {
     const classes = useStyles();
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(true);
-    const [cData, setcData] = useState();
+    const [/*cData*/, setcData] = useState();
 
     const { currentUser } = useContext(AuthContext);
     const cDataUserName = currentUser.displayName.split(" ")[0];
 
-    const [dataUser, setDataUser] = useState(cDataUserName);
+    const [dataUser, /*setDataUser*/] = useState(cDataUserName);
     const [dateState, setDateState] = React.useState({
         month: new Date().getMonth()+1,
         year: new Date().getFullYear()
@@ -62,10 +62,10 @@ function Homepage(props) {
     const [noData, setNoData] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
 
-    const closeAdd = () => {
-        console.log("Closing Add");
-        setShowAdd(false);
-    };
+    //const closeAdd = () => {
+    //    console.log("Closing Add");
+    //    setShowAdd(false);
+    //};
     const openAdd = () => {
         console.log("Opening Add");
         console.log(showAdd);

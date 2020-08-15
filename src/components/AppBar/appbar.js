@@ -9,7 +9,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle"; */
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
-import UserContext, { dateContext } from "../app/contextData";
+//import UserContext, { dateContext } from "../app/contextData";
 import Logo from "../logo/Logo";
 import { AuthContext } from "../auth/Auth";
 
@@ -36,7 +36,7 @@ export default function MenuAppBar() {
     //const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const { currentUser, login, logout } = useContext(AuthContext);
+    const { currentUser, /*login,*/ logout } = useContext(AuthContext);
 
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
