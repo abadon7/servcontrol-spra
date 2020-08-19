@@ -10,6 +10,8 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import AddDialog from "../addinfo/AddDialog";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles(theme => ({
     fabFixed: {
@@ -36,16 +38,32 @@ function Homepage(props) {
     const classes = useStyles();
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(true);
-    const [/*cData*/, setcData] = useState();
+    const [cData, setcData] = useState();
 
     const { currentUser } = useContext(AuthContext);
     const cDataUserName = currentUser.displayName.split(" ")[0];
 
-    const [dataUser, /*setDataUser*/] = useState(cDataUserName);
+    const [dataUser /*setDataUser*/] = useState(cDataUserName);
     const [dateState, setDateState] = React.useState({
-        month: new Date().getMonth()+1,
+        month: new Date().getMonth() + 1,
         year: new Date().getFullYear()
     });
+    const [dialogProps, setDialogProps] = useState({
+        data: "",
+        action: "add"
+    });
+    const [openSuccess, setOpenSuccess] = React.useState(false);
+    const handleSuccessClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpenSuccess(false);
+    };
+
+    const getDbPath = () => {
+        return `control/${dataUser}/${dateState.year}/${dateState.month}`;
+    };
+
     const pushData = data => {
         console.log(data);
         let DB_PATH = "control/".concat(
@@ -56,21 +74,49 @@ function Homepage(props) {
             dateState.month
         );
         const dataRef = firebase.database().ref(DB_PATH);
-        dataRef.push(data);
+        dataRef.push(data).then((result)=>{
+            console.log(result);
+            setOpenSuccess(true);
+        });
         //resetdataRValues();
     };
+
+    const delData = key => () => {
+        console.log("Deleting Item");
+        const DB_PATH = `${getDbPath()}/${key}`;
+        console.log(DB_PATH);
+        const dataRef = firebase.database().ref(DB_PATH);
+        dataRef.remove();
+    };
+    const updateData = key => () => {
+        console.log("Updating item");
+        console.log(key);
+        const itemData = cData.get(key);
+        setDialogProps({
+            ...dialogProps,
+            action: "update",
+            data: itemData
+        });
+        console.log(itemData);
+        openAdd();
+    };
+
     const [noData, setNoData] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
 
-    //const closeAdd = () => {
-    //    console.log("Closing Add");
-    //    setShowAdd(false);
-    //};
+    const closeAdd = () => {
+        console.log("Closing Add");
+        setShowAdd(false);
+        setDialogProps({
+            ...setDialogProps,
+            action: "add",
+            data: ""
+        });
+    };
     const openAdd = () => {
         console.log("Opening Add");
         console.log(showAdd);
         setShowAdd(true);
-        console.log(showAdd);
     };
 
     console.log("INIT");
@@ -90,9 +136,9 @@ function Homepage(props) {
         //let DB_PATH = "control"
         const stList = firebase.database().ref(DB_PATH);
         console.log(stList);
-        const dataArray = [];
         stList.orderByValue().on("value", snapshot => {
             console.log("Data");
+            const dataArray = [];
             let dataMap = new Map();
             snapshot.forEach(el => {
                 dataArray.push(el);
@@ -125,9 +171,12 @@ function Homepage(props) {
                     dateState,
                     setDateState,
                     showAdd,
-                    setShowAdd,
+                    closeAdd,
+                    //setShowAdd,
                     pushData,
-                    dataUser
+                    dataUser,
+                    delData,
+                    updateData
                 }}
             >
                 <TableAll />
@@ -141,10 +190,22 @@ function Homepage(props) {
                     >
                         <AddIcon />
                     </Fab>
-                    <AddDialog />
+                    <AddDialog
+                        action={dialogProps.action}
+                        data={dialogProps.data}
+                    />
                 </div>
                 {noData && <div>No data found</div>}
             </UserContext.Provider>
+            <Snackbar
+                open={openSuccess}
+                autoHideDuration={6000}
+                onClose={handleSuccessClose}
+            >
+                <MuiAlert elevation={6} variant="filled" onClose={handleSuccessClose} severity="success">
+                    The info has been saved successfully
+                </MuiAlert>
+            </Snackbar>
         </div>
     );
 }

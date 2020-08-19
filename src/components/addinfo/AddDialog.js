@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -54,12 +54,16 @@ export default function AddDialog(props) {
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const {
         showAdd,
-        setShowAdd,
+        //setShowAdd,
         //dataRValues,
         //collectData,
         pushData,
-        dataUser
+        dataUser,
+        closeAdd
     } = useContext(UserContext);
+    const [errors, setErrors] = React.useState({});
+
+    const [touched, setTouched] = React.useState({});
 
     //    const handleClickOpen = () => {
     //        setOpen(true);
@@ -68,7 +72,11 @@ export default function AddDialog(props) {
     const handleClose = () => {
         //setOpen(false);
         //        props.openclose();
-        setShowAdd(false);
+        //setShowAdd(false);
+        closeAdd();
+        if (props.action === "update") {
+            resetdataRValues();
+        }
     };
     //const inputDate = dataRValues.date;
     const classes = useStyles();
@@ -121,7 +129,13 @@ export default function AddDialog(props) {
         weekday: dateNow.getDay(),
         year: dateNow.getFullYear()
     };
+    console.log(props.action);
     const [dataRValues, setDataRValues] = useState(initialDataValues);
+    useEffect(() => {
+        if (props.action === "update") {
+            setDataRValues(props.data);
+        }
+    }, [props.action, props.data]);
 
     const resetdataRValues = () => {
         setDataRValues(initialDataValues);
@@ -147,11 +161,45 @@ export default function AddDialog(props) {
         });
     };
     const handlenChange = event => {
-        let value = event.target.value;
-        let name = event.target.name;
+        //      let value = event.target.value;
+        //        let name = event.target.name;
         console.log(event.target.value);
         console.log(event.target.name);
+        const { name, value: newValue, type } = event.target;
+        // keep number fields as numbers
+        const value = type === "number" ? +newValue : newValue;
+        console.log(name);
+        console.log(value);
         collectData(value, name);
+        setTouched({
+            ...touched,
+            [name]: true
+        });
+    };
+
+    const dateInputValidation = fieldValue => {
+        console.log(`validating ${fieldValue}`);
+        if (fieldValue.trim() === "00:00" || fieldValue.trim() === "0:0") {
+            console.log("No time");
+            return false;
+        }
+        return true;
+    };
+    const validate = {
+        horas: dateInputValidation
+    };
+    const handleBlur = event => {
+        const { name, value } = event.target;
+        // remove whatever error was there previously
+        const { [name]: removedError, ...rest } = errors;
+        // check for a new error
+        const error = validate[name](value);
+        // // validate the field if the value has been touched
+        setErrors({
+            ...rest,
+            //...(error && { [name]: touched[name] && error })
+            ...(error && { [name]: error })
+        });
     };
 
     const pushRnames = () => {
@@ -199,9 +247,22 @@ export default function AddDialog(props) {
         return dataRValues.rvnames[idx].study === 0;
     };
     const submitForm = () => {
-        resetdataRValues();
-        pushData(dataRValues);
+        if (dateInputValidation(dataRValues.horas)) {
+            setErrors({
+                ...errors,
+                horas: false
+            });
+            resetdataRValues();
+            pushData(dataRValues);
+        } else {
+            alert("Please add the time");
+            setErrors({
+                ...errors,
+                horas: true
+            });
+        }
     };
+
     const handlenDateChange = date => {
         console.log(date);
         setDataRValues({
@@ -243,7 +304,8 @@ export default function AddDialog(props) {
                                 label="Date"
                                 type="date"
                                 color="secondary"
-                                defaultValue={dataRValues.date}
+                                //defaultValue={dataRValues.date}
+                                value={dataRValues.date}
                                 className={[
                                     classes.textField,
                                     classes.width16ch
@@ -264,7 +326,8 @@ export default function AddDialog(props) {
                                 type="number"
                                 color="secondary"
                                 placeholder="0"
-                                defaultValue={dataRValues.pubs}
+                                //defaultValue={dataRValues.pubs}
+                                value={dataRValues.pubs}
                                 onChange={handlenChange}
                                 InputLabelProps={{
                                     shrink: true
@@ -283,7 +346,8 @@ export default function AddDialog(props) {
                                 variant="outlined"
                                 color="secondary"
                                 onChange={handlenChange}
-                                defaultValue={dataRValues.vid}
+                                //defaultValue={dataRValues.vid}
+                                value={dataRValues.vid}
                                 InputLabelProps={{
                                     shrink: true
                                 }}
@@ -306,6 +370,7 @@ export default function AddDialog(props) {
                                     inputVariant="filled"
                                     value={composeDate(dataRValues.horas)}
                                     onChange={handlenDateChange}
+                                    onBlur={handleBlur}
                                     InputProps={{
                                         name: "horas"
                                     }}

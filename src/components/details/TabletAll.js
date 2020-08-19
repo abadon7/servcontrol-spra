@@ -61,7 +61,7 @@ const useStyles = makeStyles({
 
 export default function TableAll() {
     const classes = useStyles();
-    const { pending } = useContext(UserContext);
+    const { pending, delData, updateData} = useContext(UserContext);
     let loading;
 
     if (pending) {
@@ -155,6 +155,7 @@ export default function TableAll() {
                                                     className={
                                                         classes.smallpadding
                                                     }
+                                                    onClick={updateData(item.key)}
                                                 >
                                                     <EditOutlinedIcon />
                                                 </IconButton>
@@ -162,6 +163,7 @@ export default function TableAll() {
                                                     className={
                                                         classes.smallpadding
                                                     }
+                                                    onClick={delData(item.key)}
                                                 >
                                                     <DeleteOutlinedIcon />
                                                 </IconButton>
