@@ -12,10 +12,11 @@ import UserContext, { /*dateContext*/ } from "../app/contextData";
 import LinearProgress from "@material-ui/core/LinearProgress";
 //import Avatar from "@material-ui/core/Avatar";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import IconButton from "@material-ui/core/IconButton";
+//import IconButton from "@material-ui/core/IconButton";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import DatePicker from "../DatePicker/DatePicker";
+import Button from "@material-ui/core/Button";
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -61,7 +62,7 @@ const useStyles = makeStyles({
 
 export default function TableAll() {
     const classes = useStyles();
-    const { pending, delData, updateData} = useContext(UserContext);
+    const { pending, delData, updateDataForm} = useContext(UserContext);
     let loading;
 
     if (pending) {
@@ -147,26 +148,26 @@ export default function TableAll() {
                                         </StyledTableCell>
                                         <StyledTableCell align="center">
                                             <ButtonGroup
-                                                disableElevation
+                                                disableElevation={true}
                                                 color="secondary"
                                                 aria-label="outlined secondary button group"
                                             >
-                                                <IconButton
+                                                <Button
                                                     className={
                                                         classes.smallpadding
                                                     }
-                                                    onClick={updateData(item.key)}
+                                                    onClick={updateDataForm(item.key)}
                                                 >
                                                     <EditOutlinedIcon />
-                                                </IconButton>
-                                                <IconButton
+                                                </Button>
+                                                <Button
                                                     className={
                                                         classes.smallpadding
                                                     }
                                                     onClick={delData(item.key)}
                                                 >
                                                     <DeleteOutlinedIcon />
-                                                </IconButton>
+                                                </Button>
                                             </ButtonGroup>
                                         </StyledTableCell>
                                     </StyledTableRow>

@@ -12,6 +12,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddDialog from "../addinfo/AddDialog";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
     fabFixed: {
@@ -28,6 +30,10 @@ const useStyles = makeStyles(theme => ({
         //        width: "95%",
         margin: "auto",
         maxWidth: 800
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 200,
+        color: "#fff"
     }
 }));
 
@@ -50,7 +56,8 @@ function Homepage(props) {
     });
     const [dialogProps, setDialogProps] = useState({
         data: "",
-        action: "add"
+        action: "add",
+        key: ""
     });
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const handleSuccessClose = (event, reason) => {
@@ -60,12 +67,15 @@ function Homepage(props) {
         setOpenSuccess(false);
     };
 
+    const [openBackdrop, setOpenBackdrop] = useState(false);
+
     const getDbPath = () => {
         return `control/${dataUser}/${dateState.year}/${dateState.month}`;
     };
 
     const pushData = data => {
         console.log(data);
+        setOpenBackdrop(true);
         let DB_PATH = "control/".concat(
             dataUser,
             "/",
@@ -74,8 +84,9 @@ function Homepage(props) {
             dateState.month
         );
         const dataRef = firebase.database().ref(DB_PATH);
-        dataRef.push(data).then((result)=>{
+        dataRef.push(data).then(result => {
             console.log(result);
+            setOpenBackdrop(false);
             setOpenSuccess(true);
         });
         //resetdataRValues();
@@ -86,16 +97,31 @@ function Homepage(props) {
         const DB_PATH = `${getDbPath()}/${key}`;
         console.log(DB_PATH);
         const dataRef = firebase.database().ref(DB_PATH);
-        dataRef.remove();
+        if (window.confirm("Do you want to delete this item?")) {
+            dataRef.remove();
+        }
     };
-    const updateData = key => () => {
+    const updateData = (key, data) => {
+        console.log("Updating Item");
+        console.log(data);
+        setOpenBackdrop(true);
+        const DB_PATH = `${getDbPath()}/${key}`;
+        const dataRef = firebase.database().ref(DB_PATH);
+        dataRef.update(data).then(() => {
+            console.log(`Item ${key} has been updated`);
+            setOpenBackdrop(false);
+            setOpenSuccess(true);
+        });
+    };
+    const updateDataForm = key => () => {
         console.log("Updating item");
         console.log(key);
         const itemData = cData.get(key);
         setDialogProps({
             ...dialogProps,
             action: "update",
-            data: itemData
+            data: itemData,
+            key: key
         });
         console.log(itemData);
         openAdd();
@@ -176,6 +202,7 @@ function Homepage(props) {
                     pushData,
                     dataUser,
                     delData,
+                    updateDataForm,
                     updateData
                 }}
             >
@@ -193,6 +220,7 @@ function Homepage(props) {
                     <AddDialog
                         action={dialogProps.action}
                         data={dialogProps.data}
+                        itemKey={dialogProps.key}
                     />
                 </div>
                 {noData && <div>No data found</div>}
@@ -202,10 +230,22 @@ function Homepage(props) {
                 autoHideDuration={6000}
                 onClose={handleSuccessClose}
             >
-                <MuiAlert elevation={6} variant="filled" onClose={handleSuccessClose} severity="success">
+                <MuiAlert
+                    elevation={6}
+                    variant="filled"
+                    onClose={handleSuccessClose}
+                    severity="success"
+                >
                     The info has been saved successfully
                 </MuiAlert>
             </Snackbar>
+            <Backdrop
+                className={classes.backdrop}
+                open={openBackdrop}
+                //onClick={handleClose}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
     );
 }

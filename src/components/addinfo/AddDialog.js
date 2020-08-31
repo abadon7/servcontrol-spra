@@ -59,7 +59,8 @@ export default function AddDialog(props) {
         //collectData,
         pushData,
         dataUser,
-        closeAdd
+        closeAdd,
+        updateData
     } = useContext(UserContext);
     const [errors, setErrors] = React.useState({});
 
@@ -246,14 +247,36 @@ export default function AddDialog(props) {
         console.log("Checking study at " + idx);
         return dataRValues.rvnames[idx].study === 0;
     };
+    const checkRvnames = () => {
+        if (dataRValues.rvnames.length === 0) {
+            pushRnames();
+        }
+    };
     const submitForm = () => {
         if (dateInputValidation(dataRValues.horas)) {
             setErrors({
                 ...errors,
                 horas: false
             });
-            resetdataRValues();
+            checkRvnames();
             pushData(dataRValues);
+            resetdataRValues();
+        } else {
+            alert("Please add the time");
+            setErrors({
+                ...errors,
+                horas: true
+            });
+        }
+    };
+    const submitFormUpdate = () => {
+        if (dateInputValidation(dataRValues.horas)) {
+            setErrors({
+                ...errors,
+                horas: false
+            });
+            checkRvnames();
+            updateData(props.itemKey, dataRValues);
         } else {
             alert("Please add the time");
             setErrors({
@@ -288,6 +311,7 @@ export default function AddDialog(props) {
                 open={showAdd}
                 onClose={handleClose}
                 aria-labelledby="responsive-dialog-title"
+                transitionDuration={0}
             >
                 <DialogTitle id="responsive-dialog-title">
                     {"Add a new activity record"}
@@ -410,49 +434,53 @@ export default function AddDialog(props) {
                         </div>
                         <div>
                             <List className={classes.root}>
-                                {dataRValues.rvnames.map((rname, idx) => {
-                                    const labelId = `checkbox-list-label-${idx}`;
-                                    return (
-                                        <ListItem
-                                            key={idx}
-                                            role={undefined}
-                                            dense
-                                            button
-                                            onClick={handleToggle(idx)}
-                                        >
-                                            <ListItemIcon>
-                                                <Checkbox
-                                                    edge="start"
-                                                    checked={
-                                                        //checked.indexOf(idx) !==
-                                                        //-1
-                                                        rname.study === 1
-                                                    }
-                                                    tabIndex={-1}
-                                                    disableRipple
-                                                    inputProps={{
-                                                        "aria-labelledby": labelId
-                                                    }}
+                                {dataRValues.rvnames
+                                    .filter(rname => rname.name !== "")
+                                    .map((rname, idx) => {
+                                        const labelId = `checkbox-list-label-${idx}`;
+                                        //if (rname.name !== "") {
+                                        return (
+                                            <ListItem
+                                                key={idx}
+                                                role={undefined}
+                                                dense
+                                                button
+                                                onClick={handleToggle(idx)}
+                                            >
+                                                <ListItemIcon>
+                                                    <Checkbox
+                                                        edge="start"
+                                                        checked={
+                                                            //checked.indexOf(idx) !==
+                                                            //-1
+                                                            rname.study === 1
+                                                        }
+                                                        tabIndex={-1}
+                                                        disableRipple
+                                                        inputProps={{
+                                                            "aria-labelledby": labelId
+                                                        }}
+                                                    />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    id={labelId}
+                                                    primary={rname.name}
                                                 />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                id={labelId}
-                                                primary={rname.name}
-                                            />
-                                            <ListItemSecondaryAction>
-                                                <IconButton
-                                                    edge="end"
-                                                    aria-label="delete"
-                                                    onClick={() =>
-                                                        rmRvNames(idx)
-                                                    }
-                                                >
-                                                    <DeleteOutlinedIcon />
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    );
-                                })}
+                                                <ListItemSecondaryAction>
+                                                    <IconButton
+                                                        edge="end"
+                                                        aria-label="delete"
+                                                        onClick={() =>
+                                                            rmRvNames(idx)
+                                                        }
+                                                    >
+                                                        <DeleteOutlinedIcon />
+                                                    </IconButton>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                        );
+                                        //}
+                                    })}
                             </List>
                         </div>
                         <div>
@@ -475,14 +503,25 @@ export default function AddDialog(props) {
                     >
                         Cancel
                     </Button>
-                    <Button
-                        variant="contained"
-                        onClick={submitForm}
-                        color="secondary"
-                        autoFocus
-                    >
-                        Add
-                    </Button>
+                    {props.action === "update" ? (
+                        <Button
+                            variant="contained"
+                            onClick={submitFormUpdate}
+                            color="secondary"
+                            autoFocus
+                        >
+                            UPDATE
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            onClick={submitForm}
+                            color="secondary"
+                            autoFocus
+                        >
+                            Add
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
         </div>

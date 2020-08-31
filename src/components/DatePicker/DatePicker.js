@@ -78,7 +78,7 @@ export default function DatePicker() {
                     }}
                 >
                     {months.map((mnth, num) => {
-                        return <option value={num}>{mnth}</option>;
+                        return <option key={num} value={num}>{mnth}</option>;
                     })}
                 </Select>
             </FormControl>
@@ -98,7 +98,7 @@ export default function DatePicker() {
                     }}
                 >
                     {years.map(yr => {
-                        return <option value={yr}>{yr}</option>;
+                        return <option key={yr} value={yr}>{yr}</option>;
                     })}
                 </Select>
             </FormControl>
