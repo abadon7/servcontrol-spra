@@ -1,3 +1,5 @@
+//@flow
+//
 import React, { useEffect, useState, useContext } from "react";
 import UserContext from "../app/contextData";
 /* import Button from "@material-ui/core/Button"; */
@@ -37,14 +39,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Homepage(props) {
+function Homepage() {
     // Assign a contextType to read the current theme context.
     // React will find the closest theme Provider above and use its value.
     // In this example, the current theme is "dark".
     const classes = useStyles();
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(true);
-    const [cData, setcData] = useState();
+    const [cData, setcData] = useState(new Map());
 
     const { currentUser } = useContext(AuthContext);
     const cDataUserName = currentUser.displayName.split(" ")[0];
@@ -76,13 +78,7 @@ function Homepage(props) {
     const pushData = data => {
         console.log(data);
         setOpenBackdrop(true);
-        let DB_PATH = "control/".concat(
-            dataUser,
-            "/",
-            dateState.year,
-            "/",
-            dateState.month
-        );
+        let DB_PATH = `control/${dataUser}/${dateState.year}/${dateState.month}`;
         const dataRef = firebase.database().ref(DB_PATH);
         dataRef.push(data).then(result => {
             console.log(result);
@@ -116,7 +112,10 @@ function Homepage(props) {
     const updateDataForm = key => () => {
         console.log("Updating item");
         console.log(key);
-        const itemData = cData.get(key);
+        const itemData: Object = cData.get(key);
+        if (itemData == null){
+            throw new Error("Key not found");
+        }
         setDialogProps({
             ...dialogProps,
             action: "update",
@@ -134,7 +133,7 @@ function Homepage(props) {
         console.log("Closing Add");
         setShowAdd(false);
         setDialogProps({
-            ...setDialogProps,
+            ...dialogProps,
             action: "add",
             data: ""
         });
@@ -151,13 +150,7 @@ function Homepage(props) {
         console.log("Checking login");
         console.log(dataUser);
         //let DB_PATH = "control/Henry/2020/1";
-        let DB_PATH = "control/".concat(
-            dataUser,
-            "/",
-            dateState.year,
-            "/",
-            dateState.month
-        );
+        let DB_PATH = `control/${dataUser}/${dateState.year}/${dateState.month}`;
         console.log(DB_PATH);
         //let DB_PATH = "control"
         const stList = firebase.database().ref(DB_PATH);
@@ -165,7 +158,7 @@ function Homepage(props) {
         stList.orderByValue().on("value", snapshot => {
             console.log("Data");
             const dataArray = [];
-            let dataMap = new Map();
+            let dataMap: Map<string, Object> = new Map();
             snapshot.forEach(el => {
                 dataArray.push(el);
                 console.log(el);

@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
     if (pending) {
         return (
             <div className={classes.root}>
+                <span>Loading...</span>
                 <LinearProgress />
             </div>
         );
