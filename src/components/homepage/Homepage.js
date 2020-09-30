@@ -40,9 +40,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Homepage() {
-    // Assign a contextType to read the current theme context.
-    // React will find the closest theme Provider above and use its value.
-    // In this example, the current theme is "dark".
     const classes = useStyles();
     const [data, setData] = useState([]);
     const [pending, setPending] = useState(true);
@@ -61,7 +58,9 @@ function Homepage() {
         action: "add",
         key: ""
     });
+
     const [openSuccess, setOpenSuccess] = React.useState(false);
+
     const handleSuccessClose = (event, reason) => {
         if (reason === "clickaway") {
             return;
@@ -97,6 +96,7 @@ function Homepage() {
             dataRef.remove();
         }
     };
+
     const updateData = (key, data) => {
         console.log("Updating Item");
         console.log(data);
@@ -109,6 +109,7 @@ function Homepage() {
             setOpenSuccess(true);
         });
     };
+
     const updateDataForm = key => () => {
         console.log("Updating item");
         console.log(key);

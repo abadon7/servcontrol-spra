@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import UserContext, { /*dateContext*/ } from "../app/contextData";
+import UserContext /*dateContext*/ from "../app/contextData";
 //import Skeleton from '@material-ui/lab/Skeleton';
 import LinearProgress from "@material-ui/core/LinearProgress";
 //import Avatar from "@material-ui/core/Avatar";
@@ -62,7 +62,7 @@ const useStyles = makeStyles({
 
 export default function TableAll() {
     const classes = useStyles();
-    const { pending, delData, updateDataForm} = useContext(UserContext);
+    const { pending, delData, updateDataForm } = useContext(UserContext);
     let loading;
 
     if (pending) {
@@ -89,6 +89,21 @@ export default function TableAll() {
                     aria-label="sticky table"
                     size="small"
                 >
+
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">
+                                TOTALS
+                            </TableCell>
+                            <TableCell align="center">10</TableCell>
+                            <TableCell align="center">5</TableCell>
+                            <TableCell align="center">75</TableCell>
+                            <TableCell align="center">25</TableCell>
+                            <TableCell align="center">9</TableCell>
+                            <TableCell align="center"></TableCell>
+                        </TableRow>
+                    </TableHead>
+
                     <TableHead>
                         <TableRow>
                             <StyledTableCell align="center">
@@ -114,7 +129,9 @@ export default function TableAll() {
                             </StyledTableCell>
                         </TableRow>
                     </TableHead>
+
                     {loading}
+
                     <TableBody>
                         <UserContext.Consumer>
                             {({ data }) =>
@@ -156,7 +173,9 @@ export default function TableAll() {
                                                     className={
                                                         classes.smallpadding
                                                     }
-                                                    onClick={updateDataForm(item.key)}
+                                                    onClick={updateDataForm(
+                                                        item.key
+                                                    )}
                                                 >
                                                     <EditOutlinedIcon />
                                                 </Button>

@@ -314,7 +314,7 @@ export default function AddDialog(props) {
                 transitionDuration={0}
             >
                 <DialogTitle id="responsive-dialog-title">
-                    {"Add a new activity record"}
+                    {"Add or update an activity record"}
                 </DialogTitle>
                 <DialogContent>
                     <form

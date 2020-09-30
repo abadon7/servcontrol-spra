@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "ServControl",
+  "name": " A system to manage service data",
   "icons": [
     {
       "src": "favicon.ico",
