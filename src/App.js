@@ -7,7 +7,7 @@ import Login from "./components/login/Login";
 //import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 //import { CssBaseline, CircularProgress } from '@material-ui/core'
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Switch,
     Route
     //  Redirect
