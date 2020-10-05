@@ -434,7 +434,7 @@ export default function AddDialog(props) {
                         </div>
                         <div>
                             <List className={classes.root}>
-                                {dataRValues.rvnames
+                                {dataRValues.rvnames !== "" && dataRValues.rvnames
                                     .filter(rname => rname.name !== "")
                                     .map((rname, idx) => {
                                         const labelId = `checkbox-list-label-${idx}`;

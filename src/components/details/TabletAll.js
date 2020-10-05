@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -38,7 +38,7 @@ const StyledTableRow = withStyles(theme => ({
 
 const useStyles = makeStyles({
     table: {
-        // minWidth: 700,
+        minWidth: 700,
         //    width: "90%"
     },
     container: {
@@ -62,8 +62,46 @@ const useStyles = makeStyles({
 
 export default function TableAll() {
     const classes = useStyles();
-    const { pending, delData, updateDataForm } = useContext(UserContext);
+
+    const { pending, delData, updateDataForm, data } = useContext(UserContext);
+
+    const [totalData, setTotalData] = useState({ p: 0, v: 0, h: 0, r: 0, s: 0 });
+
     let loading;
+
+    useEffect(() => {
+        let totalDataObj = { p: 0, v: 0, h: 0, r: 0, s: 0 };
+
+        const sumHours = (total, newT) => {
+            const currTime = total != 0 ? total.split(":") : "0:0".split(":");
+            const newTime = newT.split(":");
+            let h = parseInt(currTime[0]) + parseInt(newTime[0]);
+            let m = parseInt(currTime[1]) + parseInt(newTime[1]);
+
+            if (m >= 60) {
+                // Divide minutes by 60 and add result to hours
+                h += Math.floor(m / 60);
+                // Add remainder of totalM / 60 to minutes
+                m = m % 60;
+            }
+            //console.log(h + ":" + m);
+            return h + ":" + m;
+
+        }
+        const totalDataSum = (array) => {
+
+            array.forEach(element => {
+                totalDataObj.p += parseInt(element.val().pubs) || 0;
+                totalDataObj.v += parseInt(element.val().vid) || 0;
+                totalDataObj.h = sumHours(totalDataObj.h, element.val().horas);
+                totalDataObj.r += parseInt(element.val().rr) || 0;
+                totalDataObj.s += parseInt(element.val().est) || 0;
+            });
+            console.log(totalDataObj);
+            setTotalData(totalDataObj);
+        }
+        totalDataSum(data);
+    }, [data])
 
     if (pending) {
         loading = (
@@ -93,13 +131,13 @@ export default function TableAll() {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">
-                                TOTALS
+                                REPORT
                             </TableCell>
-                            <TableCell align="center">10</TableCell>
-                            <TableCell align="center">5</TableCell>
-                            <TableCell align="center">75</TableCell>
-                            <TableCell align="center">25</TableCell>
-                            <TableCell align="center">9</TableCell>
+                            <TableCell align="center">{totalData.p}</TableCell>
+                            <TableCell align="center">{totalData.v}</TableCell>
+                            <TableCell align="center">{totalData.h}</TableCell>
+                            <TableCell align="center">{totalData.r}</TableCell>
+                            <TableCell align="center">{totalData.s}</TableCell>
                             <TableCell align="center"></TableCell>
                         </TableRow>
                     </TableHead>
@@ -119,7 +157,7 @@ export default function TableAll() {
                                 Hours
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                                Return Visits
+                                R. Visits
                             </StyledTableCell>
                             <StyledTableCell align="center">
                                 Studies
@@ -133,66 +171,63 @@ export default function TableAll() {
                     {loading}
 
                     <TableBody>
-                        <UserContext.Consumer>
-                            {({ data }) =>
-                                data.map(item => (
-                                    <StyledTableRow
-                                        hover
-                                        role="checkbox"
-                                        tabIndex={-1}
-                                        key={item.key}
-                                    >
-                                        <StyledTableCell align="center">
-                                            {/*<Avatar className={classes.avatarList}>
+                        {data.map(item => (
+                            <StyledTableRow
+                                hover
+                                role="checkbox"
+                                tabIndex={-1}
+                                key={item.key}
+                            >
+                                <StyledTableCell align="center">
+                                    {/*<Avatar className={classes.avatarList}>
                                             {item.val().day}
                                         </Avatar>{" "}*/}
-                                            {item.val().day}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center">
-                                            {item.val().pubs}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center">
-                                            {item.val().vid}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center">
-                                            {item.val().horas}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center">
-                                            {item.val().rr}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center">
-                                            {item.val().est}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center">
-                                            <ButtonGroup
-                                                disableElevation={true}
-                                                color="secondary"
-                                                aria-label="outlined secondary button group"
-                                            >
-                                                <Button
-                                                    className={
-                                                        classes.smallpadding
-                                                    }
-                                                    onClick={updateDataForm(
-                                                        item.key
-                                                    )}
-                                                >
-                                                    <EditOutlinedIcon />
-                                                </Button>
-                                                <Button
-                                                    className={
-                                                        classes.smallpadding
-                                                    }
-                                                    onClick={delData(item.key)}
-                                                >
-                                                    <DeleteOutlinedIcon />
-                                                </Button>
-                                            </ButtonGroup>
-                                        </StyledTableCell>
-                                    </StyledTableRow>
-                                ))
-                            }
-                        </UserContext.Consumer>
+                                    {item.val().day}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                    {item.val().pubs}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                    {item.val().vid}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                    {item.val().horas}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                    {item.val().rr}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                    {item.val().est}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                    <ButtonGroup
+                                        disableElevation={true}
+                                        color="secondary"
+                                        aria-label="outlined secondary button group"
+                                    >
+                                        <Button
+                                            className={
+                                                classes.smallpadding
+                                            }
+                                            onClick={updateDataForm(
+                                                item.key
+                                            )}
+                                        >
+                                            <EditOutlinedIcon />
+                                        </Button>
+                                        <Button
+                                            className={
+                                                classes.smallpadding
+                                            }
+                                            onClick={delData(item.key)}
+                                        >
+                                            <DeleteOutlinedIcon />
+                                        </Button>
+                                    </ButtonGroup>
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        ))
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>
