@@ -73,7 +73,7 @@ export default function TableAll() {
         let totalDataObj = { p: 0, v: 0, h: 0, r: 0, s: 0 };
 
         const sumHours = (total, newT) => {
-            const currTime = total != 0 ? total.split(":") : "0:0".split(":");
+            const currTime = total !== 0 ? total.split(":") : "0:0".split(":");
             const newTime = newT.split(":");
             let h = parseInt(currTime[0]) + parseInt(newTime[0]);
             let m = parseInt(currTime[1]) + parseInt(newTime[1]);
