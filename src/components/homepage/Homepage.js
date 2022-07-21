@@ -1,6 +1,6 @@
 //@pflow
 //
-import React, { useEffect, useState, useContext } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import UserContext from "../app/contextData";
 /* import Button from "@material-ui/core/Button"; */
 import MenuAppBar from "../AppBar/appbar";
@@ -16,6 +16,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   fabFixed: {
@@ -59,6 +60,9 @@ function Homepage() {
     key: "",
   });
 
+  const params = useParams();
+  console.log(params);
+
   const [openSuccess, setOpenSuccess] = React.useState(false);
 
   const handleSuccessClose = (event, reason) => {
@@ -70,9 +74,21 @@ function Homepage() {
 
   const [openBackdrop, setOpenBackdrop] = useState(false);
 
-  const getDbPath = () => {
-    return `control/${dataUser}/${dateState.year}/${dateState.month}`;
-  };
+  const getUser = useCallback(() => {
+    let user = dataUser;
+    if (typeof params.name !== "undefined") {
+      user = params.name.charAt(0).toUpperCase() + params.name.slice(1);
+    }
+    return user;
+  }, [dataUser, params.name]);
+
+  const getDbPath = useCallback(() => {
+    //let user = dataUser;
+    //if (typeof params.name !== "undefined") {
+    // user = params.name.charAt(0).toUpperCase() + params.name.slice(1);
+    //}
+    return `control/${getUser()}/${dateState.year}/${dateState.month}`;
+  }, [dateState.month, dateState.year, getUser]);
 
   const pushData = (data) => {
     console.log(data);
@@ -154,12 +170,14 @@ function Homepage() {
     console.log("Checking login");
     console.log(dataUser);
     //let DB_PATH = "control/Henry/2020/1";
-    let DB_PATH = `control/${dataUser}/${dateState.year}/${dateState.month}`;
+    //let DB_PATH = `control/${dataUser}/${dateState.year}/${dateState.month}`;
+    let DB_PATH = getDbPath();
     console.log(DB_PATH);
     //let DB_PATH = "control"
     const stList = firebase.database().ref(DB_PATH);
     console.log(stList);
-    stList.orderByValue().on("value", (snapshot) => {
+    //stList.orderByValue().on("value", (snapshot) => {
+    stList.orderByChild('day').on("value", (snapshot) => {
       console.log("Data");
       const dataArray = [];
       let dataMap: Map<string, Object> = new Map();
@@ -181,7 +199,7 @@ function Homepage() {
         setNoData(false);
       }
     });
-  }, [dataUser, dateState]);
+  }, [dataUser, dateState, getDbPath]);
 
   return (
     <div className={classes.container}>
@@ -198,6 +216,7 @@ function Homepage() {
           //setShowAdd,
           pushData,
           dataUser,
+          user: getUser(),
           delData,
           updateDataForm,
           updateData,

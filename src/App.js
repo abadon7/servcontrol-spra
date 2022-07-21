@@ -7,10 +7,10 @@ import Login from "./components/login/Login";
 //import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 //import { CssBaseline, CircularProgress } from '@material-ui/core'
 import {
-    HashRouter as Router,
-    Switch,
-    Route
-    //  Redirect
+  HashRouter as Router,
+  Switch,
+  Route,
+  //  Redirect
 } from "react-router-dom";
 //import firebase from '../firebase/firebaseInit'
 //import UserContext, { dateContext } from "../app/contextData";
@@ -19,23 +19,26 @@ import {
 import PrivateRoute from "./components/Private/Private";
 import { AuthProvider } from "./components/auth/Auth";
 
-const App = props => {
-    const NoMatch = () => <h1>404 Not Found</h1>;
-    return (
-        <Router>
-            <Switch>
-                <AuthProvider>
-                    <Route exact path="/login">
-                        <Login />
-                    </Route>
-                    <PrivateRoute exact path="/">
-                        <HomePage />
-                    </PrivateRoute>
-                </AuthProvider>
-                <Route component={NoMatch} />
-            </Switch>
-        </Router>
-    );
+const App = (props) => {
+  const NoMatch = () => <h1>404 Not Found</h1>;
+  return (
+    <Router>
+      <Switch>
+        <AuthProvider>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <PrivateRoute exact path="/">
+            <HomePage />
+          </PrivateRoute>
+          <PrivateRoute exact path="/:name">
+            <HomePage />
+          </PrivateRoute>
+        </AuthProvider>
+        <Route component={NoMatch} />
+      </Switch>
+    </Router>
+  );
 };
 
 export default App;
