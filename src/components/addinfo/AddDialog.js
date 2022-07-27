@@ -25,7 +25,7 @@ import LocalLibraryOutlinedIcon from "@material-ui/icons/LocalLibraryOutlined";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 //import MomentUtils from '@date-io/moment';
-
+import Autocomplete from "@material-ui/lab/Autocomplete";
 const useStyles = makeStyles((theme) => ({
   root: {
     textAlign: "center",
@@ -61,6 +61,7 @@ export default function AddDialog(props) {
     dataUser,
     closeAdd,
     updateData,
+    rrDataNames,
   } = useContext(UserContext);
   const [errors, setErrors] = React.useState({});
 
@@ -213,6 +214,7 @@ export default function AddDialog(props) {
     updateRr();
     rname.value = "";
   };
+
   const rmRvNames = (value) => {
     console.log(`remove ${value}`);
     let rnameData = dataRValues.rvnames;
@@ -293,15 +295,19 @@ export default function AddDialog(props) {
       horas: decomposeDate(date),
     });
   };
+
   const decomposeDate = (date) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return `${hours}:${minutes}`;
   };
+
   const composeDate = (date) => {
     const spliDate = date.split(":");
     return new Date(new Date().setHours(spliDate[0], spliDate[1], 0, 0));
   };
+
+  const [returnvValue, setReturnvValue] = React.useState(rrDataNames);
 
   return (
     <div>
@@ -395,34 +401,46 @@ export default function AddDialog(props) {
               </MuiPickersUtilsProvider>
             </div>
             <div>
-              <TextField
-                className={classes.inputW90}
+              <Autocomplete
                 id="return_v"
-                label="Return Visits"
-                variant="outlined"
-                color="secondary"
-                //onChange={handlenChange}
-                InputProps={{
-                  name: "rr",
-                  startAdornment: (
-                    <>
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    </>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={pushRnames}
-                      >
-                        ADD
-                      </Button>
-                    </InputAdornment>
-                  ),
-                }}
+                freeSolo
+                clearOnBlur
+                value={returnvValue}
+                options={rrDataNames.map((option) => option.name)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    className={classes.inputW90}
+                    id="return_v"
+                    label="Return Visits"
+                    variant="outlined"
+                    color="secondary"
+                    //onChange={handlenChange}
+                    InputProps={{
+                      name: "rr",
+                      type: "search",
+                      ...params.InputProps,
+                      startAdornment: (
+                        <>
+                          <InputAdornment position="start">
+                            <AccountCircle />
+                          </InputAdornment>
+                        </>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={pushRnames}
+                          >
+                            ADD
+                          </Button>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                )}
               />
             </div>
             <div>

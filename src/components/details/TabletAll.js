@@ -19,6 +19,9 @@ import DatePicker from "../DatePicker/DatePicker";
 import Button from "@material-ui/core/Button";
 import { Typography } from "@material-ui/core";
 import Popover from "@material-ui/core/Popover";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -72,6 +75,18 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }));
+
+const generate = (rrNamesList) => {
+  console.log(rrNamesList);
+  rrNamesList.map((value) => (
+    <ListItem>
+      <ListItemText primary={value.name} />
+    </ListItem>
+  ));
+};
+
+const getAnimalsContent = (animals) =>
+  animals.map((item) => <li key={item.id}>{item.animal}</li>);
 
 export default function TableAll() {
   const classes = useStyles();
@@ -234,9 +249,18 @@ export default function TableAll() {
                       horizontal: "center",
                     }}
                   >
-                    <Typography className={classes.typography}>
-                      The content of the Popover.
+                    {/*<Typography className={classes.typography}>
+                      // The content of the Popover. // //
                     </Typography>
+                    //<List>{generate(item.val().rvnames)}</List>*/}
+                    {/*}<List>
+                      {item.val().rvnames.map((value) => (
+                        <ListItem key={value.name}>
+                          <ListItemText primary={value.name} />
+                        </ListItem>
+                      ))}
+                    </List>*/}
+                    {item.val().rr}
                   </Popover>
                 </StyledTableCell>
                 <StyledTableCell align="center">

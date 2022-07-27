@@ -45,6 +45,7 @@ function Homepage() {
   const [data, setData] = useState([]);
   const [pending, setPending] = useState(true);
   const [cData, setcData] = useState(new Map());
+  const [rrDataNames, setRrDataNames] = useState([]);
 
   const { currentUser } = useContext(AuthContext);
   const cDataUserName = currentUser.displayName.split(" ")[0];
@@ -177,9 +178,11 @@ function Homepage() {
     const stList = firebase.database().ref(DB_PATH);
     console.log(stList);
     //stList.orderByValue().on("value", (snapshot) => {
-    stList.orderByChild('day').on("value", (snapshot) => {
+    stList.orderByChild("day").on("value", (snapshot) => {
       console.log("Data");
       const dataArray = [];
+      const dataRvNames = [];
+      const tempDataRvNames = {};
       let dataMap: Map<string, Object> = new Map();
       snapshot.forEach((el) => {
         dataArray.push(el);
@@ -187,10 +190,18 @@ function Homepage() {
         console.log(el.key);
         //console.log(el.val());
         dataMap.set(el.key, el.val());
+        el.val().rvnames.forEach((el2) => {
+          if (!tempDataRvNames[el2.name.trim()]) {
+            tempDataRvNames[el2.name.trim()] = el2;
+            dataRvNames.push(el2);
+          }
+        });
       });
+      console.log(dataRvNames);
       setData(dataArray);
       setcData(dataMap);
       setPending(false);
+      setRrDataNames(dataRvNames);
       if (dataArray.length === 0) {
         console.log("No data");
         setNoData(true);
@@ -207,6 +218,7 @@ function Homepage() {
       <UserContext.Provider
         value={{
           data,
+          rrDataNames,
           pending,
           setPending,
           dateState,
