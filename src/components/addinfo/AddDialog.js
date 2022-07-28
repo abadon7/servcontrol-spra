@@ -307,7 +307,7 @@ export default function AddDialog(props) {
     return new Date(new Date().setHours(spliDate[0], spliDate[1], 0, 0));
   };
 
-  const [returnvValue, setReturnvValue] = React.useState(rrDataNames);
+  //const [returnvValue, setReturnvValue] = React.useState(rrDataNames);
 
   return (
     <div>
@@ -405,7 +405,7 @@ export default function AddDialog(props) {
                 id="return_v"
                 freeSolo
                 clearOnBlur
-                value={returnvValue}
+                value={rrDataNames}
                 options={rrDataNames.map((option) => option.name)}
                 renderInput={(params) => (
                   <TextField

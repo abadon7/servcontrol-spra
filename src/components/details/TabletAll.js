@@ -33,7 +33,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles(() => ({
   root: {
     "&:nth-of-type(odd)": {
       //backgroundColor: theme.palette.action.hover
@@ -76,18 +76,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const generate = (rrNamesList) => {
-  console.log(rrNamesList);
-  rrNamesList.map((value) => (
-    <ListItem>
-      <ListItemText primary={value.name} />
-    </ListItem>
-  ));
-};
-
-const getAnimalsContent = (animals) =>
-  animals.map((item) => <li key={item.id}>{item.animal}</li>);
-
 export default function TableAll() {
   const classes = useStyles();
 
@@ -102,19 +90,19 @@ export default function TableAll() {
     return date.toLocaleDateString("en-US", { weekday: "short" });
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [popContex, setPopContex] = React.useState({
+    popId: "",
+    anchorEl: null,
+  });
 
-  const handleClick = (event) => {
-    console.log("Popover");
-    setAnchorEl(event.currentTarget);
+  const handleClick2 = (event, id) => {
+    console.log(event.currentTarget.id);
+    setPopContex({ popId: id, anchorEl: event.currentTarget });
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose2 = () => {
+    setPopContex({ popId: "", anchorEl: null });
   };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
   useEffect(() => {
     let totalDataObj = { p: 0, v: 0, h: 0, r: 0, s: 0 };
@@ -228,18 +216,21 @@ export default function TableAll() {
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <Button
-                    aria-describedby={id}
-                    onClick={handleClick}
+                    id={"rr" + item.key}
+                    aria-describedby={"info"}
+                    onClick={(e) => {
+                      handleClick2(e, "rv" + item.key);
+                    }}
                     //variant="outlined"
                     color="secondary"
                   >
                     {item.val().rr}
                   </Button>
                   <Popover
-                    id={id}
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
+                    id={"info2"}
+                    open={popContex.popId === "rv" + item.key}
+                    anchorEl={popContex.anchorEl}
+                    onClose={handleClose2}
                     anchorOrigin={{
                       vertical: "bottom",
                       horizontal: "center",
@@ -253,14 +244,13 @@ export default function TableAll() {
                       // The content of the Popover. // //
                     </Typography>
                     //<List>{generate(item.val().rvnames)}</List>*/}
-                    {/*}<List>
+                    <List>
                       {item.val().rvnames.map((value) => (
                         <ListItem key={value.name}>
                           <ListItemText primary={value.name} />
                         </ListItem>
                       ))}
-                    </List>*/}
-                    {item.val().rr}
+                    </List>
                   </Popover>
                 </StyledTableCell>
                 <StyledTableCell align="center">

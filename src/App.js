@@ -19,7 +19,7 @@ import {
 import PrivateRoute from "./components/Private/Private";
 import { AuthProvider } from "./components/auth/Auth";
 
-const App = (props) => {
+const App = () => {
   const NoMatch = () => <h1>404 Not Found</h1>;
   return (
     <Router>
