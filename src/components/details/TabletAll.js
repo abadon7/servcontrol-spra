@@ -86,7 +86,7 @@ export default function TableAll() {
 
   let loading;
   const getDayName = (dateStr) => {
-    var date = new Date(dateStr);
+    var date = new Date(dateStr + ":05:00:00");
     return date.toLocaleDateString("en-US", { weekday: "short" });
   };
 
