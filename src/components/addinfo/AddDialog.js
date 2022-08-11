@@ -97,15 +97,32 @@ export default function AddDialog(props) {
     //    rmEst(value);
     //}
     //setChecked(newChecked);
-    if (checkEst(value)) {
-      console.log("Adding Checkbox");
-      addEst(value);
+    console.log(chkIfStudent(getStName(value)));
+    if (!chkIfStudent(getStName(value))) {
+      if (checkEst(value)) {
+        console.log("Adding Checkbox");
+        addEst(value);
+      } else {
+        console.log("Removing Checbox");
+        rmEst(value);
+      }
     } else {
-      console.log("Removing Checbox");
-      rmEst(value);
+      alert("This RR is already marked as student");
     }
     //return true
   };
+
+  const chkIfStudent = (n) => {
+    console.log("Cehcking student name " + n);
+    const student = rrDataNames.find(
+      (student) => student.name.trim() === n.trim()
+    );
+    if (student !== undefined) {
+      return student.study === 1;
+    }
+    return false;
+  };
+
   const dateNow = new Date();
   const getISODate = (date) => {
     const formatDate = new Date(date);
@@ -131,7 +148,9 @@ export default function AddDialog(props) {
     weekday: dateNow.getDay(),
     year: dateNow.getFullYear(),
   };
+
   const [dataRValues, setDataRValues] = useState(initialDataValues);
+
   useEffect(() => {
     console.log(props.action);
     if (props.action === "update") {
@@ -206,7 +225,10 @@ export default function AddDialog(props) {
 
   const pushRnames = () => {
     let rname = document.getElementById("return_v");
-    console.log(`Sending ${rname}`);
+    console.log(`Sending ${rname.value}`);
+    if (rname.value.trim() === "") {
+      return alert("Please write a name");
+    }
     let rvnameClone = dataRValues.rvnames;
     rvnameClone.push({ name: rname.value, study: 0 });
     //rnamesChange(rname.value);
@@ -239,21 +261,30 @@ export default function AddDialog(props) {
     collectData(data, "rvnames");
     updateEst();
   };
+
   const addEst = (idx) => {
     let data = dataRValues.rvnames;
     data[idx].study = 1;
     collectData(data, "rvnames");
     updateEst();
   };
+
   const checkEst = (idx) => {
     console.log("Checking study at " + idx);
     return dataRValues.rvnames[idx].study === 0;
   };
+
+  const getStName = (idx) => {
+    console.log("Getting name for " + idx);
+    return dataRValues.rvnames[idx].name;
+  };
+
   const checkRvnames = () => {
     if (dataRValues.rvnames.length === 0) {
       pushRnames();
     }
   };
+
   const submitForm = () => {
     if (dateInputValidation(dataRValues.horas)) {
       setErrors({
@@ -271,6 +302,7 @@ export default function AddDialog(props) {
       });
     }
   };
+
   const submitFormUpdate = () => {
     if (dateInputValidation(dataRValues.horas)) {
       setErrors({
@@ -404,9 +436,11 @@ export default function AddDialog(props) {
               <Autocomplete
                 id="return_v"
                 freeSolo
-                clearOnBlur
-                value={rrDataNames}
-                options={rrDataNames.map((option) => option.name)}
+                //clearOnBlur
+                //value={rrDataNames}
+                //options={rrDataNames.map((option) => option.name)}
+                options={rrDataNames}
+                getOptionLabel={(option) => option.name}
                 renderInput={(params) => (
                   <TextField
                     {...params}
