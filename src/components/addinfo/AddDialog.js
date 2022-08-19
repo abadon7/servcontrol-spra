@@ -226,9 +226,9 @@ export default function AddDialog(props) {
   const pushRnames = () => {
     let rname = document.getElementById("return_v");
     console.log(`Sending ${rname.value}`);
-    if (rname.value.trim() === "") {
-      return alert("Please write a name");
-    }
+    // if (rname.value.trim() === "") {
+    //   return alert("Please write a name");
+    // }
     let rvnameClone = dataRValues.rvnames;
     rvnameClone.push({ name: rname.value, study: 0 });
     //rnamesChange(rname.value);
